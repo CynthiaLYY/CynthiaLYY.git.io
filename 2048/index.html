@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="favicon.ico">
+	<title>2048</title>
+	<link rel="stylesheet" href="style_2048.css">
+</head>
+<body>
+<header>
+	<h1>2048</h1>
+	<p><label for="score">score: </label><span id="score">0</span></p>
+	<a href="javascript:newGame();" id="new_game">New Game</a>
+</header>
+<div id="grid-container">
+    <div class="grid-cell" id="grid-cell-0-0"></div>
+    <div class="grid-cell" id="grid-cell-0-1"></div>
+    <div class="grid-cell" id="grid-cell-0-2"></div>
+    <div class="grid-cell" id="grid-cell-0-3"></div>
+
+    <div class="grid-cell" id="grid-cell-1-0"></div>
+    <div class="grid-cell" id="grid-cell-1-1"></div>
+    <div class="grid-cell" id="grid-cell-1-2"></div>
+    <div class="grid-cell" id="grid-cell-1-3"></div>
+
+    <div class="grid-cell" id="grid-cell-2-0"></div>
+    <div class="grid-cell" id="grid-cell-2-1"></div>
+    <div class="grid-cell" id="grid-cell-2-2"></div>
+    <div class="grid-cell" id="grid-cell-2-3"></div>
+
+    <div class="grid-cell" id="grid-cell-3-0"></div>
+    <div class="grid-cell" id="grid-cell-3-1"></div>
+    <div class="grid-cell" id="grid-cell-3-2"></div>
+    <div class="grid-cell" id="grid-cell-3-3"></div>
+</div>
+<script src="jquery-2.1.4.js"></script>
+<script src="support_2048.js"></script>
+<script src="animation_2048.js"></script>	
+<script src="main_2048.js"></script>
+</body>
+</html>
