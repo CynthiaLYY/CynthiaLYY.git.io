@@ -1,0 +1,256 @@
+Title         : 实习总结
+Author        : Claireyyli
+Logo          : false
+
+[TITLE]
+
+# 技 术 点 {font-family:"Microsoft YaHei"}
+[实习期间最直接的收获就是技术上的成长:]{font-family:"Microsoft YaHei"}
+~ Align-Left { margin-left=5ex }
+* Web Audio API
+* [ 语音缓存 ]{font-family:"Microsoft YaHei"}
+* [ 语音拼接 ]{font-family:"Microsoft YaHei"}
+* [ 屏幕常亮 ]{font-family:"Microsoft YaHei"}
+~
+
+## Web  Audio  API
+[Web Audio API 提供了在Web上控制音频的一个非常有效通用的系统 ， 允许开发者来自选音频源，对音频添加作用，创建可视化音频，应用空间效果 （如平移），等等。]{font-family:"Microsoft YaHei"; font-size: 16px} 
+~ Center
+![Web Audio API]
+
+[Web Audio API]: images/Web-Audio-API.svg "Web Audio API" { width:auto; max-width:90% }
+
+~
+
+
+
+## 缓存{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+* &nbsp;indexedDB
+* &nbsp;localStorage
+* &nbsp;Service Worker
+* &nbsp;[联合使用]{font-family:"Microsoft YaHei"}
+
+
+### IndexedDB{margin-bottom:0.5em;}
+~ Center
+![indexedDB]
+[indexedDB]: images/indexedDB.svg "indexedDB" { width:auto; max-width:90% }
+~
+
+
+### IndexedDB{margin-bottom:0.5em;}
+[基本使用]{font-family:"Microsoft YaHei";}
+```javascript
+   //篇幅限制，这里没有展示完整代码
+  
+   var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+   var request = indexedDB.open(dbName, version);
+   
+   request.onupgradeneeded = function(e){
+    if(!db.objectStoreNames.contains(storeName)){
+       store = db.createObjectStore(storeName);
+    }
+   };
+   
+   // 增加/修改一条记录
+   var transaction = db.transaction(this.storeName, 'readwrite');
+   var objectStore = transaction.objectStore(this.storeName);
+   var request = objectStore.put(value, key);
+   // 查询一条记录
+   request = objectStore.get(key);
+   // 删除一条记录
+   request = objectStore(this.storeName).delete(key);
+   // 关闭数据库
+   db.close();
+```
+
+
+### IndexedDB{margin-bottom:0.5em;}
+[兼容性测试]{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![indexedDB兼容性测试]
+[indexedDB兼容性测试]: images/indexedDB-.png "indexedDB兼容性测试" { width:auto; max-width:90% }
+~
+
+
+### localStorage{margin-bottom:0.5em;}
+~ Center
+![localStorage]
+
+[localStorage]: images/localStorage.svg "localStorage" { width:auto; max-width:90% }
+
+~
+[基本使用很简单，不再赘述]{font-family:"Microsoft YaHei"; font-size:14px; color: #aaaaaa;}
+
+
+### localStorage{margin-bottom:0.5em;}
+[兼容性测试]{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![localStorage兼容性测试]
+[localStorage兼容性测试]: images/localStorage-.png "localStorage兼容性测试" { width:auto; max-width:90% }
+~
+[？表示部分支持]{font-family:"Microsoft YaHei"; font-size:14px; color: #aaaaaa;}
+
+
+### localStorage{margin-bottom:0.5em;}
+[数据类型转换]{font-family:"Microsoft YaHei";}
+```javascript
+ function ab2str(buf) {
+    var uint8array = new Uint8Array(buf);
+    var result = '';
+    for(var i=0; i<uint8array.length; i++){
+        result += String.fromCharCode.apply(null, uint8array.slice(i, i+1));
+    }
+    return result;
+ }
+ 
+ function str2ab(str) {
+    var buf = new ArrayBuffer(str.length);
+    var bufView = new Uint8Array(buf);
+    for (var i=0, strLen=str.length; i<strLen; i++) {
+        bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
+ }
+```
+
+
+### Service  Worker{margin-bottom:0.5em;}
+~ Center
+![Service Worker]
+[Service Worker]: images/Service-Worker.svg "Service Worker" { width:auto; max-width:90% }
+~
+
+
+### Service  Worker{margin-bottom:0.5em;}
+[基本使用]{font-family:"Microsoft YaHei";}
+```javascript
+  // 篇幅限制，这里展示的是拦截请求并返回模拟响应
+  
+   self.addEventListener('fetch', function(e){
+    var sourceType = e.request.url
+                      .split('.')[e.request.url.split('.').length-1].toLowerCase();
+    if(sourceType === 'mp3'){
+         e.respondWith(caches.match(e.request).then(function(response){
+            if(response){
+                return response;
+            }else{
+                fetch(e.request).then(function(response){
+                    caches.open(CACHE_VERSION).then(function(cache){
+                        cache.put(e.request, response.clone());
+                    }).then(function(){
+                        return response;
+                    });
+                });
+            }
+        }));
+    }else{
+        console.log('Fetched file is not mp3', sourceType);
+    }
+});
+```
+
+
+### Service  Worker{margin-bottom:0.5em;}
+[兼容性测试]{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![serviceWorker兼容性测试]
+
+[serviceWorker兼容性测试]: images/serviceWorker-.png "serviceWorker兼容性测试" { width:auto; max-width:90% }
+
+~
+[Android上QQ浏览器可以注册worker，但是install、active事件不触发，控制台报错：The Service Worker security policy prevented an action]{font-family:"Microsoft YaHei"; font-size:16px; color: #aaaaaa;}
+
+
+### 联合使用{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+* [优先级确定]{font-family:"Microsoft YaHei"}
+* [流程图]{font-family:"Microsoft YaHei"}
+
+
+#### 优先级确定{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![pc测速]
+[pc测速]: images/pc-.png "pc测速" { width:auto; max-width:90% }
+~
+
+
+#### 优先级确定{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![phone测速]
+[phone测速]: images/phone-.png "phone测速" { width:auto; max-width:90% }
+~
+
+
+#### 优先级确定{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+[根据兼容性和性能测试结果:]{font-family:"Microsoft YaHei"}
+~ Align-Left { margin-left=5ex }
+* [速度：indexedDB/localStorage优于service worker，故仅使用service worker做缓存版本控制]{font-family:"Microsoft YaHei"; font-size:16px;}
+* [兼容性：localStorage优于indexedDB,但indexedDB可以直接缓存二进制文件，故优先使用indexedDB]{font-family:"Microsoft YaHei"; font-size:16px;}
+~
+
+
+#### 流程图{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![request]
+[request]: images/request.svg "request" { width:auto; max-width:90% }
+~
+[一次上线所有缓存策略风险较大，第一期缓存使用兼容性较好的localStorage进行]{font-family:"Microsoft YaHei"; font-size:14px; color: #aaaaaa;}
+
+
+## 语 音 拼 接{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![aucombo语音拼接]
+[aucombo语音拼接]: images/aucombo-.svg "aucombo语音拼接" { width:auto; max-width:90% }
+~
+
+
+## 语 音 拼 接{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+[兼容性测试]{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![http直接拼接]
+
+[http直接拼接]: images/http-.png "http直接拼接" { width:auto; max-width:90% }
+
+~
+
+
+## 语 音 拼 接{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+[兼容性测试]{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![ls拼接]
+[ls拼接]: images/ls-.png "ls拼接" { width:auto; max-width:90% }
+~
+
+
+## 语 音 拼 接{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+[兼容性测试]{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![pj拼接方案测试]
+[pj拼接方案测试]: images/pj-.png "pj拼接方案测试" { width:auto; max-width:90% }
+~
+
+
+## 语 音 拼 接{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+* [audio element拼接兼容性较差，目前不考虑其拼接]{font-family:"Microsoft YaHei"; font-size:16px;}
+* [web audio api拼接方案中，拼接数据源再播放兼容性较差，使用先后播放方案进行拼接]{font-family:"Microsoft YaHei"; font-size:16px;}
+
+
+## 屏 幕 常 亮{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![cl屏幕常亮]
+[cl屏幕常亮]: images/cl-.svg "cl屏幕常亮" { width:auto; max-width:90% }
+~
+[最终没有解决ios下屏幕常亮问题]{font-family:"Microsoft YaHei"; font-size:28px;}
+
+
+# 方案设计{font-family:"Microsoft YaHei"; margin-bottom:0.5em;}
+~ Center
+![design方案设计]
+[design方案设计]: images/design-.svg "design方案设计" { width:auto; max-width:90% }
+~
+
+
+# hello
+
+
+
